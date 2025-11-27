@@ -1,15 +1,27 @@
 # Tavily MCP Agent for Google ADK
 
-A powerful web search agent built with Google ADK (Agent Development Kit) and Tavily's MCP (Model Context Protocol) integration. This agent enables intelligent web searches with comprehensive source references, optimized for both English and Thai language queries.
+A powerful multi-tool research agent built with Google ADK (Agent Development Kit) and Tavily's MCP (Model Context Protocol) integration. This agent uses **multiple Tavily tools strategically** to provide the most accurate and comprehensive information possible, with special optimization for news extraction from specific websites.
 
-## Features
+## ✨ Key Features
 
-- **Advanced Web Search**: Uses Tavily's search API with MCP integration
-- **Comprehensive Source References**: Every search includes detailed source citations
-- **Multi-language Support**: Optimized for both English and Thai language searches
-- **Domain-Specific Search**: Ability to search within specific websites
+### 🔍 Multi-Tool Intelligence
+- **tavily-search**: Find relevant articles across the web
+- **tavily-extract**: Get full content from specific URLs (not just snippets)
+- **tavily-map**: Discover all available pages on a website
+- **tavily-crawl**: Deep exploration and comprehensive data collection
+
+### 🎯 Advanced Capabilities
+- **Parallel Execution**: Search multiple domains simultaneously for faster results
+- **Comprehensive Extraction**: Uses search + extract combination for maximum accuracy
+- **Complete Content**: Gets full articles, not just snippets or summaries
+- **Cross-Domain Analysis**: Aggregates and cross-references information from multiple sources
+- **Smart Tool Selection**: Automatically chooses the right tools for each task
+
+### 🌏 Language & Domain Support
+- **Multi-language Support**: Optimized for both English and Thai language queries
+- **Domain-Specific Search**: Extract news from specific websites (e.g., thairath.co.th, bbc.com/thai)
 - **News-Optimized**: Special handling for news queries with time-based filtering
-- **Rich Content Extraction**: Includes raw content and AI-generated summaries
+- **Source Attribution**: Clear attribution for every piece of information
 
 ## Prerequisites
 
@@ -73,35 +85,64 @@ tavily/
 └── README.md            # This file
 ```
 
-## Configuration
+## 🚀 How It Works: Multi-Tool Strategy
 
-The agent is configured in `my_agent/agent.py` with the following key features:
+The agent is configured in `my_agent/agent.py` with an intelligent multi-tool strategy for maximum accuracy and completeness.
 
-### Search Parameters
+### 📋 Execution Strategy for Comprehensive News Extraction
 
-The agent automatically uses these optimal parameters for every search:
+When you ask for news from specific websites, the agent follows this systematic approach:
 
-- **include_answer**: `true` - Provides AI-generated summaries
-- **include_raw_content**: `true` - Includes full source content
-- **max_results**: `10` - Returns up to 10 results
-- **search_depth**: `"advanced"` - Uses advanced search for comprehensive results
+#### **STEP 1: Parallel Search** ⚡
+- Runs **separate searches for EACH domain simultaneously**
+- Example: Searching thairath.co.th AND bbc.com/thai at the same time
+- Much faster than sequential searches
+- Each search uses optimal parameters:
+  - `include_answer: true` - AI-generated summaries
+  - `include_raw_content: true` - Full source content
+  - `max_results: 10` - Comprehensive results
+  - `search_depth: "advanced"` - Detailed information
+  - `topic: "news"` - For news queries
+  - `time_range: "week"` - Recent news
 
-### Domain-Specific Searches
+#### **STEP 2: Extract Full Content** 📄
+- Identifies top 3-5 articles from each domain
+- Uses `tavily-extract` to get **complete article text**
+- No more relying on just snippets!
+- Ensures maximum accuracy and context
 
-You can search within specific domains by mentioning them in your query:
+#### **STEP 3: Map Exploration** 🗺️ (Optional)
+- For comprehensive coverage requests
+- Uses `tavily-map` to discover all news pages
+- Explores site structure intelligently
+
+#### **STEP 4: Deep Crawl** 🕷️ (Optional)
+- For "all information" requests
+- Uses `tavily-crawl` for systematic collection
+- Intelligent discovery of relevant content
+
+### 🎯 Domain-Specific Searches
+
+Simply mention websites in your query:
 
 ```
 สรุปข่าวน้ำท่วมประเทศไทยล่าสุด จาก https://www.thairath.co.th/ และ https://www.bbc.com/thai
 ```
 
-The agent will automatically extract domains and use the `include_domains` parameter.
+The agent will:
+1. ✅ Extract domains: `["thairath.co.th", "bbc.com"]`
+2. ✅ Search both domains in parallel
+3. ✅ Extract full content from top articles
+4. ✅ Cross-reference and synthesize information
+5. ✅ Present organized results by source
 
-### Thai Language Support
+### 🌍 Thai Language Optimization
 
-For Thai language queries, the agent automatically:
-- Sets `topic: "news"` for news-related searches
-- Uses `time_range: "week"` for recent news
-- Applies advanced search depth for comprehensive coverage
+For Thai queries, automatic optimizations:
+- `topic: "news"` for news-related searches
+- `time_range: "week"` for recent news
+- Advanced search depth for comprehensive coverage
+- Handles `/thai` or `/th` paths for international sites
 
 ## Usage
 
@@ -120,55 +161,122 @@ adk web
 
 ### Example Queries
 
-**English:**
+#### **Basic Search:**
 ```
 Search for the latest news about artificial intelligence
 ```
 
-**Thai:**
+#### **Thai Language:**
 ```
 สรุปข่าวน้ำท่วมประเทศไทยล่าสุด
 ```
 
-**Domain-Specific:**
+#### **Multi-Domain Search (Recommended for Best Results):**
 ```
-Find recent articles about climate change from bbc.com and theguardian.com
+สรุปข่าวน้ำท่วมประเทศไทยล่าสุด จาก https://www.thairath.co.th/ และ https://www.bbc.com/thai
 ```
+
+**What happens:** The agent will:
+1. Search thairath.co.th and bbc.com/thai in parallel
+2. Extract full content from top articles
+3. Cross-reference information
+4. Provide comprehensive summary organized by source
+
+#### **Comprehensive Analysis:**
+```
+Find ALL information about climate change from bbc.com
+```
+
+**What happens:** The agent may use:
+- `tavily-search` to find relevant articles
+- `tavily-map` to discover all climate-related pages
+- `tavily-extract` to get full content
+- `tavily-crawl` for deep exploration (if needed)
 
 ### Response Format
 
-The agent will provide responses in this format:
+The agent provides **comprehensive, well-organized responses**:
 
 ```
-[Comprehensive summary of the search results]
+[Comprehensive Summary - synthesizes ALL findings from ALL sources]
 
-## แหล่งที่มา / Sources:
+## 📊 ข้อมูลจากแหล่งต่างๆ / Information by Source
 
+### 🔍 จาก thairath.co.th:
 1. **[Article Title]**
-   - URL: https://example.com/article
-   - สาระสำคัญ: [Key excerpt from the article]
+   - URL: https://thairath.co.th/article/...
+   - วันที่: [Date]
+   - สาระสำคัญ: [Key points from article]
+   - รายละเอียด: [Full details extracted]
 
-2. **[Article Title]**
-   - URL: https://example.com/article2
-   - สาระสำคัญ: [Key excerpt from the article]
+2. **[Article Title 2]**
+   - ...
 
-...
+### 🔍 จาก bbc.com/thai:
+1. **[Article Title]**
+   - URL: https://bbc.com/thai/article/...
+   - วันที่: [Date]
+   - สาระสำคัญ: [Key points]
+   - รายละเอียด: [Full details]
+
+## 🎯 สรุปรวม / Overall Summary
+[Cross-referenced analysis, patterns, key findings]
+
+## 🔗 ลิงก์ทั้งหมด / All Links
+[All URLs organized by domain]
 ```
 
-## Available Tavily Search Parameters
+## 🛠️ Available Tavily Tools & Parameters
 
-The Tavily MCP server supports these parameters (automatically configured by the agent):
+The agent has access to **4 powerful Tavily tools** via MCP:
 
-| Parameter | Type | Description | Default |
-|-----------|------|-------------|---------|
-| `query` | string | Search query (required) | - |
+### 1️⃣ tavily-search
+Find relevant articles and content across the web.
+
+**Key Parameters (auto-configured):**
+| Parameter | Type | Description | Agent Default |
+|-----------|------|-------------|---------------|
+| `query` | string | Search query (required) | User's query |
 | `search_depth` | string | "basic" or "advanced" | "advanced" |
-| `topic` | string | "general" or "news" | Context-based |
-| `include_answer` | boolean | Include AI summary | true |
-| `include_raw_content` | boolean | Include raw HTML | true |
+| `topic` | string | "general" or "news" | "news" (for news) |
+| `include_answer` | boolean | AI-generated summary | true |
+| `include_raw_content` | boolean | Full source content | true |
 | `max_results` | number | Max results (5-20) | 10 |
-| `include_domains` | array | Whitelist domains | Auto-detected |
-| `time_range` | string | "day", "week", "month", "year" | Context-based |
+| `include_domains` | array | Whitelist specific domains | Auto-extracted |
+| `time_range` | string | "day", "week", "month", "year" | "week" (for news) |
+
+### 2️⃣ tavily-extract
+Get complete content from specific URLs (not just snippets).
+
+**Parameters:**
+- `urls`: Array of URLs to extract from
+- `extract_text`: true (get full text)
+- `extract_links`: true (get all links)
+- `extract_images`: true (get images)
+
+**When used:** After search to get full article content from top URLs.
+
+### 3️⃣ tavily-map
+Discover all available pages and structure of a website.
+
+**Parameters:**
+- `url`: Base URL to map
+- `max_depth`: How deep to explore (default: 2)
+- `max_pages`: Maximum pages to discover (default: 50)
+
+**When used:** For comprehensive site exploration requests.
+
+### 4️⃣ tavily-crawl
+Deep exploration with extraction and intelligent discovery.
+
+**Parameters:**
+- `url`: Base URL to crawl
+- `max_depth`: Crawl depth (default: 2)
+- `max_pages`: Maximum pages (default: 30)
+- `extract`: true (extract content while crawling)
+- `intelligent_discovery`: true (AI-powered page discovery)
+
+**When used:** For "all information" or complete analysis requests.
 
 ## Customization
 
