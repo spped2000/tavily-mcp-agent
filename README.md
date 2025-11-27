@@ -337,14 +337,6 @@ adk web --debug
 
 ## การพัฒนา
 
-### ทดสอบด้วย Jupyter Notebook
-
-ใช้ไฟล์ `tavily_test.ipynb` เพื่อทดสอบการเรียก Tavily API โดยตรง:
-
-```bash
-jupyter notebook tavily_test.ipynb
-```
-
 ### โครงสร้างโค้ด
 
 - **agent.py**: การกำหนดค่า agent หลักพร้อม instructions และ tools
