@@ -1,395 +1,354 @@
-# Tavily MCP Agent for Google ADK
+# Tavily MCP Agent สำหรับ Google ADK
 
-A powerful multi-tool research agent built with Google ADK (Agent Development Kit) and Tavily's MCP (Model Context Protocol) integration. This agent uses **multiple Tavily tools strategically** to provide the most accurate and comprehensive information possible, with special optimization for news extraction from specific websites.
+ระบบค้นหาและวิเคราะห์ข่าวที่ใช้ Google ADK (Agent Development Kit) ร่วมกับ Tavily MCP (Model Context Protocol) เพื่อรวบรวมข้อมูลข่าวจากหลายเว็บไซต์อย่างครบถ้วนและแม่นยำ
 
-## ✨ Key Features
+## ความสามารถหลัก
 
-### 🔍 Multi-Tool Intelligence
-- **tavily-search**: Find relevant articles across the web
-- **tavily-extract**: Get full content from specific URLs (not just snippets)
-- **tavily-map**: Discover all available pages on a website
-- **tavily-crawl**: Deep exploration and comprehensive data collection
+### การค้นหาแบบหลายเครื่องมือ
+- **tavily-search**: ค้นหาบทความและเนื้อหาที่เกี่ยวข้อง
+- **tavily-extract**: ดึงเนื้อหาฉบับเต็มจาก URL ที่กำหนด
+- **tavily-map**: สำรวจโครงสร้างและหน้าต่างๆ ของเว็บไซต์
+- **tavily-crawl**: รวบรวมข้อมูลอย่างละเอียดและครอบคลุม
 
-### 🎯 Advanced Capabilities
-- **Parallel Execution**: Search multiple domains simultaneously for faster results
-- **Comprehensive Extraction**: Uses search + extract combination for maximum accuracy
-- **Complete Content**: Gets full articles, not just snippets or summaries
-- **Cross-Domain Analysis**: Aggregates and cross-references information from multiple sources
-- **Smart Tool Selection**: Automatically chooses the right tools for each task
+### ฟีเจอร์พิเศษ
+- **การค้นหาแบบขอบขนาน**: ค้นหาหลายเว็บไซต์พร้อมกันเพื่อความเร็ว
+- **การดึงข้อมูลแบบครบถ้วน**: ใช้การค้นหาร่วมกับการดึงเนื้อหาเต็มเพื่อความแม่นยำสูงสุด
+- **เนื้อหาฉบับสมบูรณ์**: ได้รับบทความเต็ม ไม่ใช่เพียงส่วนย่อย
+- **การวิเคราะห์ข้ามแหล่ง**: รวบรวมและเปรียบเทียบข้อมูลจากหลายแหล่ง
+- **การเลือกเครื่องมืออัจฉริยะ**: เลือกใช้เครื่องมือที่เหมาะสมกับงานแต่ละประเภทโดยอัตโนมัติ
 
-### 🌏 Language & Domain Support
-- **Multi-language Support**: Optimized for both English and Thai language queries
-- **Domain-Specific Search**: Extract news from specific websites (e.g., thairath.co.th, bbc.com/thai)
-- **News-Optimized**: Special handling for news queries with time-based filtering
-- **Source Attribution**: Clear attribution for every piece of information
+### รองรับภาษาไทยและภาษาอังกฤษ
+- รองรับคำค้นหาภาษาไทยและภาษาอังกฤษ
+- สามารถระบุเว็บไซต์เป้าหมายได้ (เช่น thairath.co.th, bbc.com/thai)
+- ปรับแต่งสำหรับการค้นหาข่าวโดยเฉพาะ
+- แสดงแหล่งที่มาของข้อมูลอย่างชัดเจน
 
-## Prerequisites
+## ความต้องการของระบบ
 
-Before you begin, ensure you have the following installed:
+ก่อนเริ่มใช้งาน กรุณาติดตั้งโปรแกรมต่อไปนี้:
 
-- Python 3.10 or higher
-- Node.js and npm (for Tavily MCP server)
-- Git (for version control)
+- Python 3.10 หรือสูงกว่า
+- Node.js และ npm (สำหรับ Tavily MCP server)
+- Git (สำหรับจัดการ version control)
 
-## Installation
+## การติดตั้ง
 
-### 1. Clone the Repository
+### 1. Clone Repository
 
 ```bash
-git clone <your-repository-url>
-cd tavily
+git clone https://github.com/spped2000/tavily-mcp-agent.git
+cd tavily-mcp-agent
 ```
 
-### 2. Create a Virtual Environment
+### 2. สร้าง Virtual Environment
 
+**Windows:**
 ```bash
-# On Windows
 python -m venv .venv
 .venv\Scripts\activate
+```
 
-# On macOS/Linux
+**macOS/Linux:**
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
+### 3. ติดตั้ง Dependencies
 
 ```bash
 pip install google-adk
 ```
 
-### 4. Set Up Environment Variables
+### 4. ตั้งค่า Environment Variables
 
-Create a `.env` file in the root directory:
+สร้างไฟล์ `.env` ในโฟลเดอร์หลัก:
 
 ```env
 TAVILY_API_KEY=your_tavily_api_key_here
 ```
 
-**To get your Tavily API key:**
-1. Visit [https://tavily.com](https://tavily.com)
-2. Sign up for a free account
-3. Navigate to your dashboard to get your API key
+**วิธีการขอ API key:**
+1. เข้าไปที่ https://tavily.com
+2. สมัครสมาชิก
+3. รับ API key จาก dashboard
 
-## Project Structure
+## โครงสร้างโปรเจ็กต์
 
 ```
-tavily/
+tavily-mcp-agent/
 ├── my_agent/
 │   ├── __init__.py
-│   ├── agent.py          # Main agent configuration
-│   └── .env              # Agent-specific environment variables
-├── .env                  # Root environment variables
-├── .gitignore           # Git ignore rules
-├── tavily_test.ipynb    # Jupyter notebook for testing
-└── README.md            # This file
+│   ├── agent.py          # ไฟล์กำหนดค่าหลัก
+│   └── .env              # Environment variables ของ agent
+├── .env                  # Environment variables หลัก
+├── .gitignore           # กฎการ ignore ไฟล์ใน git
+├── tavily_test.ipynb    # Jupyter notebook สำหรับทดสอบ
+└── README.md            # ไฟล์นี้
 ```
 
-## 🚀 How It Works: Multi-Tool Strategy
+## กลยุทธ์การทำงาน
 
-The agent is configured in `my_agent/agent.py` with an intelligent multi-tool strategy for maximum accuracy and completeness.
+ระบบใช้กลยุทธ์หลายขั้นตอนเพื่อให้ได้ข้อมูลที่ครบถ้วนและแม่นยำที่สุด:
 
-### 📋 Execution Strategy for Comprehensive News Extraction
+### ขั้นที่ 1: การค้นหาแบบขนาน
+- ค้นหาแต่ละเว็บไซต์พร้อมกัน
+- ใช้พารามิเตอร์ที่เหมาะสม: `include_answer`, `include_raw_content`, `max_results: 10`
+- กำหนด `search_depth: "advanced"` เพื่อผลลัพธ์ที่ละเอียด
+- สำหรับข่าว: ใช้ `topic: "news"` และ `time_range: "week"`
 
-When you ask for news from specific websites, the agent follows this systematic approach:
+### ขั้นที่ 2: การดึงเนื้อหาเต็ม
+- เลือกบทความสำคัญจากแต่ละเว็บไซต์
+- ใช้ `tavily-extract` เพื่อดึงเนื้อหาฉบับเต็ม
+- ไม่พึ่งพาเพียงส่วนย่อยจากผลการค้นหา
+- รับประกันความแม่นยำและบริบทที่สมบูรณ์
 
-#### **STEP 1: Parallel Search** ⚡
-- Runs **separate searches for EACH domain simultaneously**
-- Example: Searching thairath.co.th AND bbc.com/thai at the same time
-- Much faster than sequential searches
-- Each search uses optimal parameters:
-  - `include_answer: true` - AI-generated summaries
-  - `include_raw_content: true` - Full source content
-  - `max_results: 10` - Comprehensive results
-  - `search_depth: "advanced"` - Detailed information
-  - `topic: "news"` - For news queries
-  - `time_range: "week"` - Recent news
+### ขั้นที่ 3: การสำรวจโครงสร้าง (ทางเลือก)
+- สำหรับการค้นหาที่ต้องการความครอบคลุม
+- ใช้ `tavily-map` เพื่อค้นหาหน้าข่าวทั้งหมด
+- สำรวจโครงสร้างเว็บไซต์อย่างชาญฉลาด
 
-#### **STEP 2: Extract Full Content** 📄
-- Identifies top 3-5 articles from each domain
-- Uses `tavily-extract` to get **complete article text**
-- No more relying on just snippets!
-- Ensures maximum accuracy and context
+### ขั้นที่ 4: การรวบรวมข้อมูลแบบละเอียด (ทางเลือก)
+- สำหรับคำขอที่ต้องการข้อมูลครบถ้วนมาก
+- ใช้ `tavily-crawl` เพื่อรวบรวมข้อมูลอย่างเป็นระบบ
+- มีการค้นพบหน้าที่เกี่ยวข้องอย่างชาญฉลาด
 
-#### **STEP 3: Map Exploration** 🗺️ (Optional)
-- For comprehensive coverage requests
-- Uses `tavily-map` to discover all news pages
-- Explores site structure intelligently
+## การใช้งาน
 
-#### **STEP 4: Deep Crawl** 🕷️ (Optional)
-- For "all information" requests
-- Uses `tavily-crawl` for systematic collection
-- Intelligent discovery of relevant content
-
-### 🎯 Domain-Specific Searches
-
-Simply mention websites in your query:
-
-```
-สรุปข่าวน้ำท่วมประเทศไทยล่าสุด จาก https://www.thairath.co.th/ และ https://www.bbc.com/thai
-```
-
-The agent will:
-1. ✅ Extract domains: `["thairath.co.th", "bbc.com"]`
-2. ✅ Search both domains in parallel
-3. ✅ Extract full content from top articles
-4. ✅ Cross-reference and synthesize information
-5. ✅ Present organized results by source
-
-### 🌍 Thai Language Optimization
-
-For Thai queries, automatic optimizations:
-- `topic: "news"` for news-related searches
-- `time_range: "week"` for recent news
-- Advanced search depth for comprehensive coverage
-- Handles `/thai` or `/th` paths for international sites
-
-## Usage
-
-### Running the Agent with Google ADK
-
-1. **Start the ADK Web UI:**
+### เริ่มต้นระบบ
 
 ```bash
 cd my_agent
 adk web
 ```
 
-2. **Open your browser** to the displayed URL (typically `http://localhost:8000`)
+เปิดเบราว์เซอร์ไปที่ URL ที่แสดง (โดยปกติคือ `http://localhost:8000`)
 
-3. **Start chatting** with the agent using natural language queries
+### ตัวอย่างคำถาม
 
-### Example Queries
-
-#### **Basic Search:**
+**การค้นหาพื้นฐาน:**
 ```
-Search for the latest news about artificial intelligence
+ค้นหาข่าวล่าสุดเกี่ยวกับปัญญาประดิษฐ์
 ```
 
-#### **Thai Language:**
+**การค้นหาภาษาไทย:**
 ```
 สรุปข่าวน้ำท่วมประเทศไทยล่าสุด
 ```
 
-#### **Multi-Domain Search (Recommended for Best Results):**
+**การค้นหาจากหลายเว็บไซต์ (แนะนำสำหรับผลลัพธ์ที่ดีที่สุด):**
 ```
 สรุปข่าวน้ำท่วมประเทศไทยล่าสุด จาก https://www.thairath.co.th/ และ https://www.bbc.com/thai
 ```
 
-**What happens:** The agent will:
-1. Search thairath.co.th and bbc.com/thai in parallel
-2. Extract full content from top articles
-3. Cross-reference information
-4. Provide comprehensive summary organized by source
+ระบบจะ:
+1. แยกชื่อโดเมน: `["thairath.co.th", "bbc.com"]`
+2. ค้นหาทั้งสองเว็บไซต์แบบขนาน
+3. ดึงเนื้อหาเต็มจากบทความสำคัญ
+4. เปรียบเทียบและสังเคราะห์ข้อมูล
+5. แสดงผลลัพธ์ที่จัดกลุ่มตามแหล่งที่มา
 
-#### **Comprehensive Analysis:**
+**การวิเคราะห์แบบครอบคลุม:**
 ```
-Find ALL information about climate change from bbc.com
+ค้นหาข้อมูลทั้งหมดเกี่ยวกับการเปลี่ยนแปลงสภาพภูมิอากาศจาก bbc.com
 ```
 
-**What happens:** The agent may use:
-- `tavily-search` to find relevant articles
-- `tavily-map` to discover all climate-related pages
-- `tavily-extract` to get full content
-- `tavily-crawl` for deep exploration (if needed)
+ระบบอาจใช้:
+- `tavily-search` เพื่อหาบทความที่เกี่ยวข้อง
+- `tavily-map` เพื่อค้นหาหน้าที่เกี่ยวข้องทั้งหมด
+- `tavily-extract` เพื่อดึงเนื้อหาเต็ม
+- `tavily-crawl` เพื่อสำรวจอย่างละเอียด (ถ้าจำเป็น)
 
-### Response Format
+## รูปแบบการตอบ
 
-The agent provides **comprehensive, well-organized responses**:
+ระบบจะแสดงผลลัพธ์ในรูปแบบที่จัดระเบียบ:
 
 ```
-[Comprehensive Summary - synthesizes ALL findings from ALL sources]
+[สรุปภาพรวม - สังเคราะห์ข้อมูลจากทุกแหล่ง]
 
-## 📊 ข้อมูลจากแหล่งต่างๆ / Information by Source
+## ข้อมูลจากแหล่งต่างๆ
 
-### 🔍 จาก thairath.co.th:
-1. **[Article Title]**
+### จาก thairath.co.th:
+1. **[ชื่อบทความ]**
    - URL: https://thairath.co.th/article/...
-   - วันที่: [Date]
-   - สาระสำคัญ: [Key points from article]
-   - รายละเอียด: [Full details extracted]
+   - วันที่: [วันที่]
+   - สาระสำคัญ: [ประเด็นสำคัญ]
+   - รายละเอียด: [รายละเอียดที่ดึงมา]
 
-2. **[Article Title 2]**
+2. **[ชื่อบทความ 2]**
    - ...
 
-### 🔍 จาก bbc.com/thai:
-1. **[Article Title]**
+### จาก bbc.com/thai:
+1. **[ชื่อบทความ]**
    - URL: https://bbc.com/thai/article/...
-   - วันที่: [Date]
-   - สาระสำคัญ: [Key points]
-   - รายละเอียด: [Full details]
+   - วันที่: [วันที่]
+   - สาระสำคัญ: [ประเด็นสำคัญ]
+   - รายละเอียด: [รายละเอียดที่ดึงมา]
 
-## 🎯 สรุปรวม / Overall Summary
-[Cross-referenced analysis, patterns, key findings]
+## สรุปรวม
+[การวิเคราะห์เปรียบเทียบ รูปแบบ และข้อค้นพบสำคัญ]
 
-## 🔗 ลิงก์ทั้งหมด / All Links
-[All URLs organized by domain]
+## ลิงก์ทั้งหมด
+[รายการ URL ทั้งหมดที่จัดกลุ่มตามแหล่งที่มา]
 ```
 
-## 🛠️ Available Tavily Tools & Parameters
+## เครื่องมือและพารามิเตอร์
 
-The agent has access to **4 powerful Tavily tools** via MCP:
+ระบบมีเครื่องมือทั้งหมด 4 ตัวจาก Tavily MCP:
 
-### 1️⃣ tavily-search
-Find relevant articles and content across the web.
+### 1. tavily-search
+ค้นหาบทความและเนื้อหาที่เกี่ยวข้อง
 
-**Key Parameters (auto-configured):**
-| Parameter | Type | Description | Agent Default |
-|-----------|------|-------------|---------------|
-| `query` | string | Search query (required) | User's query |
-| `search_depth` | string | "basic" or "advanced" | "advanced" |
-| `topic` | string | "general" or "news" | "news" (for news) |
-| `include_answer` | boolean | AI-generated summary | true |
-| `include_raw_content` | boolean | Full source content | true |
-| `max_results` | number | Max results (5-20) | 10 |
-| `include_domains` | array | Whitelist specific domains | Auto-extracted |
-| `time_range` | string | "day", "week", "month", "year" | "week" (for news) |
+**พารามิเตอร์สำคัญ:**
+| พารามิเตอร์ | ประเภท | คำอธิบาย | ค่าเริ่มต้น |
+|-----------|------|----------|------------|
+| `query` | string | คำค้นหา (จำเป็น) | จากผู้ใช้ |
+| `search_depth` | string | "basic" หรือ "advanced" | "advanced" |
+| `topic` | string | "general" หรือ "news" | "news" (สำหรับข่าว) |
+| `include_answer` | boolean | รวมสรุปจาก AI | true |
+| `include_raw_content` | boolean | รวมเนื้อหาต้นฉบับ | true |
+| `max_results` | number | จำนวนผลลัพธ์สูงสุด (5-20) | 10 |
+| `include_domains` | array | ระบุเว็บไซต์เฉพาะ | ดึงอัตโนมัติ |
+| `time_range` | string | "day", "week", "month", "year" | "week" (สำหรับข่าว) |
 
-### 2️⃣ tavily-extract
-Get complete content from specific URLs (not just snippets).
+### 2. tavily-extract
+ดึงเนื้อหาฉบับเต็มจาก URL เฉพาะ
 
-**Parameters:**
-- `urls`: Array of URLs to extract from
-- `extract_text`: true (get full text)
-- `extract_links`: true (get all links)
-- `extract_images`: true (get images)
+**พารามิเตอร์:**
+- `urls`: รายการ URL ที่ต้องการดึงข้อมูล
+- `extract_text`: true (ดึงข้อความ)
+- `extract_links`: true (ดึงลิงก์)
+- `extract_images`: true (ดึงรูปภาพ)
 
-**When used:** After search to get full article content from top URLs.
+**ใช้เมื่อ:** หลังจากค้นหาเพื่อดึงเนื้อหาบทความเต็ม
 
-### 3️⃣ tavily-map
-Discover all available pages and structure of a website.
+### 3. tavily-map
+ค้นพบโครงสร้างและหน้าต่างๆ ของเว็บไซต์
 
-**Parameters:**
-- `url`: Base URL to map
-- `max_depth`: How deep to explore (default: 2)
-- `max_pages`: Maximum pages to discover (default: 50)
+**พารามิเตอร์:**
+- `url`: URL หลักที่จะสำรวจ
+- `max_depth`: ความลึกในการสำรวจ (ค่าเริ่มต้น: 2)
+- `max_pages`: จำนวนหน้าสูงสุด (ค่าเริ่มต้น: 50)
 
-**When used:** For comprehensive site exploration requests.
+**ใช้เมื่อ:** ต้องการสำรวจเว็บไซต์อย่างครอบคลุม
 
-### 4️⃣ tavily-crawl
-Deep exploration with extraction and intelligent discovery.
+### 4. tavily-crawl
+รวบรวมข้อมูลอย่างละเอียดพร้อมการค้นพบอัจฉริยะ
 
-**Parameters:**
-- `url`: Base URL to crawl
-- `max_depth`: Crawl depth (default: 2)
-- `max_pages`: Maximum pages (default: 30)
-- `extract`: true (extract content while crawling)
-- `intelligent_discovery`: true (AI-powered page discovery)
+**พารามิเตอร์:**
+- `url`: URL หลักที่จะรวบรวมข้อมูล
+- `max_depth`: ความลึกในการรวบรวม (ค่าเริ่มต้น: 2)
+- `max_pages`: จำนวนหน้าสูงสุด (ค่าเริ่มต้น: 30)
+- `extract`: true (ดึงเนื้อหาขณะรวบรวม)
+- `intelligent_discovery`: true (การค้นพบด้วย AI)
 
-**When used:** For "all information" or complete analysis requests.
+**ใช้เมื่อ:** ต้องการข้อมูลทั้งหมดหรือการวิเคราะห์ที่ครบถ้วน
 
-## Customization
+## การปรับแต่ง
 
-### Modifying the Agent
+### แก้ไขพฤติกรรมของ Agent
 
-To customize the agent behavior, edit `my_agent/agent.py`:
+แก้ไขไฟล์ `my_agent/agent.py`:
 
 ```python
 root_agent = Agent(
-    model="gemini-3-pro-preview",  # Change model here
+    model="gemini-3-pro-preview",  # เปลี่ยน model ที่นี่
     name="tavily_agent",
-    instruction="""...""",  # Modify instructions here
+    instruction="...",  # แก้ไข instructions ที่นี่
     tools=[...]
 )
 ```
 
-### Changing the Model
+### เปลี่ยน Model
 
-Available Google ADK models:
-- `gemini-3-pro-preview` (current)
+Model ที่ใช้ได้จาก Google ADK:
+- `gemini-3-pro-preview` (ปัจจุบัน)
 - `gemini-2.5-pro`
 - `gemini-2.0-flash`
 
-### Adjusting Search Behavior
+### ปรับพารามิเตอร์การค้นหา
 
-Modify the instruction guidelines in `agent.py` to change:
-- Default search parameters
-- Response formatting
-- Language-specific behavior
-- Domain filtering rules
+แก้ไข instructions ในไฟล์ `agent.py` เพื่อเปลี่ยน:
+- พารามิเตอร์การค้นหาเริ่มต้น
+- รูปแบบการตอบ
+- พฤติกรรมเฉพาะภาษา
+- กฎการกรองโดเมน
 
-## Troubleshooting
+## การแก้ปัญหา
 
-### Common Issues
+### ปัญหาที่พบบ่อย
 
-**1. "TAVILY_API_KEY not found"**
-- Ensure your `.env` file exists and contains a valid API key
-- Check that the virtual environment is activated
+**1. ไม่พบ TAVILY_API_KEY**
+- ตรวจสอบว่าไฟล์ `.env` มีอยู่และมี API key ที่ถูกต้อง
+- ตรวจสอบว่า virtual environment ถูก activate แล้ว
 
-**2. "npx command not found"**
-- Install Node.js from [https://nodejs.org](https://nodejs.org)
-- Ensure npm is in your system PATH
+**2. ไม่พบคำสั่ง npx**
+- ติดตั้ง Node.js จาก https://nodejs.org
+- ตรวจสอบว่า npm อยู่ใน system PATH
 
-**3. "Connection timeout"**
-- Check your internet connection
-- Verify your Tavily API key is valid
-- Try increasing the timeout in `agent.py` (currently 30 seconds)
+**3. Connection timeout**
+- ตรวจสอบการเชื่อมต่ออินเทอร์เน็ต
+- ตรวจสอบว่า API key ถูกต้อง
+- ลองเพิ่ม timeout ในไฟล์ `agent.py` (ปัจจุบันคือ 30 วินาที)
 
-**4. Agent not showing references**
-- Restart the ADK web server
-- Verify the agent.py instructions haven't been modified
-- Check the console for any error messages
+**4. Agent ไม่แสดงแหล่งอ้างอิง**
+- Restart ADK web server
+- ตรวจสอบว่าไฟล์ agent.py ถูก update แล้ว
+- ตรวจสอบ console สำหรับข้อความ error
 
-### Debug Mode
+### โหมด Debug
 
-To enable debug logging, modify the agent startup:
+เปิดใช้งาน debug logging:
 
 ```bash
 adk web --debug
 ```
 
-## Development
+## การพัฒนา
 
-### Testing with Jupyter Notebook
+### ทดสอบด้วย Jupyter Notebook
 
-Use the included `tavily_test.ipynb` notebook to test Tavily API calls directly:
+ใช้ไฟล์ `tavily_test.ipynb` เพื่อทดสอบการเรียก Tavily API โดยตรง:
 
 ```bash
 jupyter notebook tavily_test.ipynb
 ```
 
-### Code Structure
+### โครงสร้างโค้ด
 
-- **agent.py**: Main agent configuration with instructions and tool setup
-- **MCPToolset**: Handles the MCP connection to Tavily server
-- **StdioConnectionParams**: Configures the stdio connection for MCP
+- **agent.py**: การกำหนดค่า agent หลักพร้อม instructions และ tools
+- **MCPToolset**: จัดการการเชื่อมต่อ MCP กับ Tavily server
+- **StdioConnectionParams**: กำหนดค่าการเชื่อมต่อ stdio สำหรับ MCP
 
-## Contributing
+## การมีส่วนร่วม
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+ยินดีรับการมีส่วนร่วม กรุณาส่ง Pull Request
 
-### Development Setup
+### ขั้นตอนการพัฒนา
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+1. Fork repository
+2. สร้าง feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit การเปลี่ยนแปลง (`git commit -m 'Add amazing feature'`)
+4. Push ไปยัง branch (`git push origin feature/amazing-feature`)
+5. เปิด Pull Request
 
-## Resources
+## แหล่งข้อมูล
 
-- [Google ADK Documentation](https://cloud.google.com/vertex-ai/docs/adk)
-- [Tavily API Documentation](https://docs.tavily.com)
+- [เอกสาร Google ADK](https://cloud.google.com/vertex-ai/docs/adk)
+- [เอกสาร Tavily API](https://docs.tavily.com)
 - [Tavily MCP Server](https://github.com/apappascs/tavily-search-mcp-server)
 - [Model Context Protocol](https://modelcontextprotocol.io)
 
-## License
+## ใบอนุญาต
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+โปรเจ็กต์นี้ใช้ใบอนุญาต MIT License
 
-## Acknowledgments
+## ข้อมูลเพิ่มเติม
 
-- Google ADK team for the Agent Development Kit
-- Tavily for providing the search API
-- MCP (Model Context Protocol) community
-
-## Support
-
-For issues and questions:
-- Open an issue in this repository
-- Check the [Google ADK Documentation](https://cloud.google.com/vertex-ai/docs/adk)
-- Visit [Tavily Support](https://docs.tavily.com)
+- สำหรับปัญหาและคำถาม: เปิด issue ใน repository นี้
+- ตรวจสอบ [เอกสาร Google ADK](https://cloud.google.com/vertex-ai/docs/adk)
+- เยี่ยมชม [Tavily Support](https://docs.tavily.com)
 
 ---
 
-**Note**: This agent requires valid API keys for both Google Cloud (for Gemini models) and Tavily (for search functionality). Ensure you have proper API quotas and billing set up for production use.
+**หมายเหตุ**: ระบบต้องการ API key ที่ถูกต้องสำหรับทั้ง Google Cloud (สำหรับ Gemini models) และ Tavily (สำหรับการค้นหา) กรุณาตรวจสอบ API quotas และการตั้งค่าการเรียกเก็บเงินสำหรับการใช้งานจริง
