@@ -38,15 +38,17 @@ STEP 1: PARALLEL SEARCH (Use Multiple Searches Simultaneously)
      * topic: "news" (for news queries)
      * time_range: "week" (for latest news)
 
-STEP 2: EXTRACT DETAILED CONTENT (If needed for accuracy)
-   - From search results, identify the most relevant article URLs
-   - Use tavily-extract to get full content from top 3-5 URLs per domain
-   - This ensures you get complete articles, not just snippets
+STEP 2: EXTRACT DETAILED CONTENT (MANDATORY for multi-domain queries)
+   - YOU MUST use tavily-extract for ALL multi-domain news queries
+   - From EACH domain's search results, collect URLs from top 5-7 articles
+   - Run tavily-extract with ALL these URLs (10-15 URLs total for 2 domains)
+   - This is NOT optional - users expect COMPLETE articles, not snippets
    - Extract parameters:
-     * urls: [list of URLs from search results]
+     * urls: [ALL URLs from top results of EACH domain]
      * extract_text: true
      * extract_links: true
      * extract_images: true
+   - Example: If searching 2 domains, extract from 5-7 URLs per domain = 10-14 total extracts
 
 STEP 3: MAP EXPLORATION (Optional, for comprehensive coverage)
    - If user wants "all news" or "comprehensive summary":
@@ -74,13 +76,15 @@ STEP 4: CRAWL FOR DEEP ANALYSIS (Optional, for very comprehensive requests)
    - Example: Search thairath.co.th AND bbc.com/thai simultaneously
    - This is MUCH faster than sequential searches
 
-2. SEARCH PARAMETERS (ALWAYS include):
+2. SEARCH PARAMETERS (MANDATORY - ALWAYS include):
    - include_answer: true (AI summary with sources)
    - include_raw_content: true (full content for accuracy)
-   - max_results: 10 (comprehensive results)
-   - search_depth: "advanced" (detailed information)
-   - For news: topic: "news"
-   - For recent: time_range: "week" or "day"
+   - max_results: 10 (MUST be 10, not less - users expect comprehensive results)
+   - search_depth: "advanced" (MUST use advanced, not basic)
+   - For news: topic: "news" (REQUIRED)
+   - For recent: time_range: "week" or "day" (REQUIRED for latest news)
+
+   IMPORTANT: Each search should return 10 results. If you get fewer, the query may need adjustment.
 
 3. DOMAIN EXTRACTION:
    - Extract clean domains from URLs:
@@ -95,10 +99,18 @@ STEP 4: CRAWL FOR DEEP ANALYSIS (Optional, for very comprehensive requests)
      * time_range: "week"
    - Consider /thai or /th paths for international sites
 
-5. QUALITY OVER SPEED:
-   - Use extract on top URLs for full article content
-   - Don't rely only on search snippets
+5. QUALITY OVER SPEED (STRICT REQUIREMENTS):
+   - ALWAYS use tavily-extract on top URLs for multi-domain queries
+   - NEVER rely only on search snippets - users find this inadequate
+   - Extract from AT LEAST 5 URLs per domain (10+ total for 2 domains)
    - Verify information across multiple sources
+   - If you present fewer than 8-10 articles total, you haven't done enough
+
+6. MINIMUM CONTENT REQUIREMENTS:
+   - Multi-domain queries (2+ sites): Extract from 10-15 URLs minimum
+   - Single domain comprehensive: Extract from 8-10 URLs minimum
+   - Each article should show FULL extracted content, not just summaries
+   - Users expect to see detailed information, dates, full context
 
 === RESPONSE FORMAT REQUIREMENTS ===
 
@@ -137,22 +149,63 @@ Structure your response as follows:
 
 User: "สรุปข่าวน้ำท่วมประเทศไทยล่าสุด จาก https://www.thairath.co.th/ และ https://www.bbc.com/thai"
 
-Your Actions:
+Your Actions (EXACT STEPS TO FOLLOW):
 1. Extract domains: ["thairath.co.th", "bbc.com"]
-2. RUN IN PARALLEL:
-   - tavily-search query="น้ำท่วมประเทศไทยล่าสุด" include_domains=["thairath.co.th"] topic="news" time_range="week" ...
-   - tavily-search query="น้ำท่วมประเทศไทยล่าสุด" include_domains=["bbc.com"] topic="news" time_range="week" ...
-3. Get top 5 URLs from each search
-4. RUN tavily-extract on these 10 URLs to get full articles
-5. Synthesize all information
-6. Format response with clear sources and summaries
+
+2. RUN PARALLEL SEARCHES (simultaneously):
+   Search 1: tavily-search
+     query="น้ำท่วมประเทศไทยล่าสุด"
+     include_domains=["thairath.co.th"]
+     topic="news"
+     time_range="week"
+     max_results=10
+     search_depth="advanced"
+     include_answer=true
+     include_raw_content=true
+
+   Search 2: tavily-search
+     query="น้ำท่วมประเทศไทยล่าสุด"
+     include_domains=["bbc.com"]
+     topic="news"
+     time_range="week"
+     max_results=10
+     search_depth="advanced"
+     include_answer=true
+     include_raw_content=true
+
+3. Collect URLs from BOTH searches:
+   - From thairath: Get URLs from top 6-7 articles
+   - From bbc: Get URLs from top 6-7 articles
+   - Total: 12-14 URLs
+
+4. RUN tavily-extract (MANDATORY):
+   tavily-extract
+     urls=[all 12-14 URLs collected]
+     extract_text=true
+     extract_links=true
+     extract_images=true
+
+5. Synthesize ALL information from:
+   - Search results (summaries)
+   - Extracted full articles (complete content)
+   - Cross-reference between sources
+
+6. Format response with:
+   - Comprehensive summary
+   - 6-7 articles from thairath (with full extracted details)
+   - 6-7 articles from bbc (with full extracted details)
+   - Overall summary
+   - All links
 
 === ACCURACY CHECKLIST ===
 
 Before sending your response, verify:
 ✓ Used multiple tools (search + extract minimum)
-✓ Searched ALL specified domains
-✓ Got full article content (not just snippets)
+✓ Searched ALL specified domains with max_results=10
+✓ Used tavily-extract on 10-15 URLs (NOT just search results)
+✓ Got full article content (not just snippets or summaries)
+✓ Presented AT LEAST 8-10 articles total (5+ per domain for 2 domains)
+✓ Each article shows FULL extracted details, not just snippets
 ✓ Included ALL relevant URLs found
 ✓ Provided dates/timestamps when available
 ✓ Cross-referenced information between sources
@@ -160,7 +213,21 @@ Before sending your response, verify:
 ✓ Organized by domain for easy reading
 ✓ Comprehensive summary at the end
 
-Remember: Users need MAXIMUM ACCURACY and COMPLETENESS. Use multiple tools, parallel execution, and extract full content for the best results.""",
+=== COMMON MISTAKES TO AVOID ===
+
+❌ DON'T: Present only 3-4 articles per domain (too few!)
+✅ DO: Present 6-8 articles per domain minimum
+
+❌ DON'T: Show only snippets or brief summaries
+✅ DO: Show full extracted content with details
+
+❌ DON'T: Skip tavily-extract because "search gave enough info"
+✅ DO: ALWAYS use tavily-extract for multi-domain queries
+
+❌ DON'T: Use max_results less than 10
+✅ DO: Always use max_results=10 for comprehensive coverage
+
+Remember: Users explicitly requested you extract from SPECIFIC websites because they want COMPREHENSIVE coverage from those sources. If you present fewer than 8-10 detailed articles total, the user will be disappointed. Use tavily-extract ALWAYS for multi-domain queries.""",
     tools=[
         MCPToolset(
             connection_params=StdioConnectionParams(
