@@ -83,7 +83,6 @@ tavily-mcp-agent/
 │   └── .env              # Environment variables ของ agent
 ├── .env                  # Environment variables หลัก
 ├── .gitignore           # กฎการ ignore ไฟล์ใน git
-├── tavily_test.ipynb    # Jupyter notebook สำหรับทดสอบ
 └── README.md            # ไฟล์นี้
 ```
 
@@ -304,15 +303,6 @@ Model ที่ใช้ได้จาก Google ADK:
 adk web --debug
 ```
 
-## การพัฒนา
-
-### ทดสอบด้วย Jupyter Notebook
-
-ใช้ไฟล์ `tavily_test.ipynb` เพื่อทดสอบการเรียก Tavily API โดยตรง:
-
-```bash
-jupyter notebook tavily_test.ipynb
-```
 
 ### โครงสร้างโค้ด
 
@@ -341,7 +331,7 @@ jupyter notebook tavily_test.ipynb
 
 ## ใบอนุญาต
 
-โปรเจ็กต์นี้ใช้ใบอนุญาต MIT License
+MIT License
 
 ## ข้อมูลเพิ่มเติม
 
