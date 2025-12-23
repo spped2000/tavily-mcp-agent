@@ -87,7 +87,6 @@ tavily-mcp-agent/
 │   ├── __init__.py
 │   ├── agent.py          # ไฟล์กำหนดค่าหลัก
 │   └── .env              # Environment variables ของ agent
-├── .env                  # Environment variables หลัก
 ├── .gitignore           # กฎการ ignore ไฟล์ใน git
 └── README.md            # ไฟล์นี้
 ```
@@ -123,7 +122,6 @@ tavily-mcp-agent/
 ### เริ่มต้นระบบ
 
 ```bash
-cd my_agent
 adk web
 ```
 
