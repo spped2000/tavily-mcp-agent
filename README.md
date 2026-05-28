@@ -29,13 +29,35 @@
 - ปรับแต่งสำหรับการค้นหาข่าวโดยเฉพาะ
 - แสดงแหล่งที่มาของข้อมูลอย่างชัดเจน
 
-## ความต้องการของระบบ
+## ความต้องการของระบบ (Prerequisites)
 
-ก่อนเริ่มใช้งาน กรุณาติดตั้งโปรแกรมต่อไปนี้:
+ก่อนเริ่มใช้งาน ต้องติดตั้งโปรแกรมต่อไปนี้ให้ครบก่อน **ตามลำดับ**:
 
-- Python 3.10 หรือสูงกว่า
-- Node.js และ npm (สำหรับ Tavily MCP server)
-- Git (สำหรับจัดการ version control)
+| โปรแกรม | เวอร์ชันขั้นต่ำ | ใช้ทำอะไร | คำสั่งตรวจสอบ |
+|---------|--------------|----------|--------------|
+| **Python** | 3.10+ (แนะนำ 3.12+) | รัน Google ADK และตัว agent | `python --version` |
+| **pip** | มากับ Python | ติดตั้ง Python packages | `python -m pip --version` |
+| **Node.js + npm** | Node 18+ | รัน Tavily MCP server ผ่าน `npx` | `node --version` และ `npx --version` |
+| **Git** | ใดก็ได้ | clone โปรเจกต์ | `git --version` |
+
+> **สำคัญ:** Tavily MCP server ถูกเรียกผ่าน `npx tavily-mcp@latest` ขณะ agent ทำงาน ดังนั้น **ต้องมี Node.js/npx** ในเครื่องเสมอ ไม่งั้น agent จะค้นหาไม่ได้
+
+### วิธีติดตั้งโปรแกรมที่จำเป็น
+
+**1. Python** — ดาวน์โหลดจาก https://www.python.org/downloads/
+- ตอนติดตั้งบน Windows ให้ติ๊ก ☑ **"Add Python to PATH"**
+
+**2. Node.js (มาพร้อม npm/npx)** — ดาวน์โหลด LTS จาก https://nodejs.org
+- ตรวจสอบหลังติดตั้ง: `npx --version` ต้องขึ้นเลขเวอร์ชัน
+
+**3. Git** — ดาวน์โหลดจาก https://git-scm.com/downloads
+
+ตรวจสอบว่าครบทุกตัวก่อนไปต่อ:
+```bash
+python --version   # เช่น Python 3.12.x
+npx --version      # เช่น 11.x.x
+git --version      # เช่น git version 2.x
+```
 
 ## การติดตั้ง
 
@@ -46,12 +68,21 @@ git clone https://github.com/spped2000/tavily-mcp-agent.git
 cd tavily-mcp-agent
 ```
 
-### 2. สร้าง Virtual Environment
+### 2. สร้างและเปิดใช้ Virtual Environment
 
-**Windows:**
-```bash
+แนะนำให้ใช้ virtual environment เพื่อแยก dependencies ออกจาก Python หลัก
+
+**Windows (PowerShell):**
+```powershell
 python -m venv .venv
-.venv\Scripts\activate
+.venv\Scripts\Activate.ps1
+```
+> ถ้าเจอ error เรื่อง execution policy ให้รัน: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` ครั้งเดียว
+
+**Windows (Command Prompt):**
+```cmd
+python -m venv .venv
+.venv\Scripts\activate.bat
 ```
 
 **macOS/Linux:**
@@ -60,24 +91,61 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
+เมื่อ activate สำเร็จจะเห็น `(.venv)` นำหน้า prompt
+
 ### 3. ติดตั้ง Dependencies
 
 ```bash
 pip install google-adk
 ```
 
-### 4. ตั้งค่า Environment Variables
+แพ็กเกจ `google-adk` จะติดตั้ง dependencies ที่จำเป็นให้ครบ (รวมถึง `google-genai` และ `mcp`)
 
-สร้างไฟล์ `.env` ในโฟลเดอร์หลัก:
-
-```env
-TAVILY_API_KEY=your_tavily_api_key_here
+ตรวจสอบว่าติดตั้งสำเร็จ:
+```bash
+adk --version      # เช่น adk, version 1.23.0
 ```
 
-**วิธีการขอ API key:**
-1. เข้าไปที่ https://tavily.com
-2. สมัครสมาชิก
-3. รับ API key จาก dashboard
+> **หมายเหตุ:** ไม่ต้องติดตั้ง Tavily MCP server เองล่วงหน้า เพราะ `npx -y tavily-mcp@latest` จะดาวน์โหลดและรันให้อัตโนมัติครั้งแรกที่ใช้งาน (ครั้งแรกอาจใช้เวลาสักครู่)
+
+### 4. ตั้งค่า Environment Variables (API Keys)
+
+โปรเจกต์นี้ต้องใช้ **API key 2 ตัว** คือ Tavily (สำหรับค้นหา) และ Google Gemini (สำหรับ LLM)
+
+สร้างไฟล์ชื่อ `.env` ไว้ใน **โฟลเดอร์ `my_agent/`** (ADK โหลด `.env` จากโฟลเดอร์ของ agent):
+
+```env
+# Tavily API key (สำหรับเครื่องมือค้นหา)
+TAVILY_API_KEY=your_tavily_api_key_here
+
+# Google Gemini API key (สำหรับโมเดล LLM)
+GOOGLE_API_KEY=your_google_api_key_here
+
+# ใช้ Gemini API โดยตรง (ไม่ใช่ Vertex AI)
+GOOGLE_GENAI_USE_VERTEXAI=FALSE
+```
+
+> **สำคัญ:** ต้องมีครบทั้ง 3 บรรทัด หากขาด `GOOGLE_API_KEY` ตัว agent จะเรียกโมเดลไม่ได้ และหากขาด `TAVILY_API_KEY` ตัว MCP server จะ start ไม่ขึ้น
+
+**วิธีขอ Tavily API key:**
+1. เข้าไปที่ https://tavily.com แล้วสมัครสมาชิก
+2. ไปที่หน้า dashboard
+3. คัดลอก API key (ขึ้นต้นด้วย `tvly-...`)
+
+**วิธีขอ Google Gemini API key (ฟรี):**
+1. เข้าไปที่ https://aistudio.google.com/app/apikey
+2. ล็อกอินด้วยบัญชี Google
+3. กด **"Create API key"** แล้วคัดลอกค่า (ขึ้นต้นด้วย `AIza...`)
+
+> ⚠️ ไฟล์ `.env` ถูกใส่ไว้ใน `.gitignore` แล้ว **อย่า commit API key ขึ้น repository เด็ดขาด**
+
+### 5. ตรวจสอบก่อนรันจริง
+
+ตรวจว่า agent โหลดได้และ key ครบ:
+```bash
+python -c "from my_agent import agent; print('OK:', agent.root_agent.name, '|', agent.root_agent.model)"
+```
+ถ้าได้ผลลัพธ์ `OK: tavily_agent | gemini-2.5-flash` แปลว่าพร้อมใช้งาน
 
 ## โครงสร้างโปรเจ็กต์
 
@@ -85,8 +153,8 @@ TAVILY_API_KEY=your_tavily_api_key_here
 tavily-mcp-agent/
 ├── my_agent/
 │   ├── __init__.py
-│   ├── agent.py          # ไฟล์กำหนดค่าหลัก
-│   └── .env              # Environment variables ของ agent
+│   ├── agent.py          # ไฟล์กำหนดค่าหลัก (model, instructions, tools)
+│   └── .env              # API keys (สร้างเอง — ไม่ถูก commit)
 ├── .gitignore           # กฎการ ignore ไฟล์ใน git
 └── README.md            # ไฟล์นี้
 ```
@@ -255,7 +323,7 @@ adk web
 
 ```python
 root_agent = Agent(
-    model="gemini-3-pro-preview",  # เปลี่ยน model ที่นี่
+    model="gemini-2.5-flash",  # เปลี่ยน model ที่นี่
     name="tavily_agent",
     instruction="...",  # แก้ไข instructions ที่นี่
     tools=[...]
@@ -265,9 +333,11 @@ root_agent = Agent(
 ### เปลี่ยน Model
 
 Model ที่ใช้ได้จาก Google ADK:
-- `gemini-3-pro-preview` (ปัจจุบัน)
-- `gemini-2.5-pro`
+- `gemini-2.5-flash` (ปัจจุบัน — เร็ว เสถียร เหมาะกับการใช้งานทั่วไป)
+- `gemini-2.5-pro` (คุณภาพสูงกว่าสำหรับงานวิเคราะห์หลายแหล่ง แต่ช้า/แพงกว่า)
 - `gemini-2.0-flash`
+
+> **หมายเหตุ:** หลีกเลี่ยง model ที่เป็น `*-preview` เพราะอาจถูกปลดระวาง (deprecated) และทำให้ใช้งานไม่ได้ (เช่น `gemini-3-pro-preview` เดิมที่คืน error `404 NOT_FOUND`)
 
 ### ปรับพารามิเตอร์การค้นหา
 
