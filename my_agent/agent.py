@@ -8,7 +8,7 @@ import os
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 root_agent = Agent(
-    model="gemini-3-pro-preview",
+    model="gemini-2.5-flash",
     name="tavily_agent",
     instruction="""You are an advanced research assistant that uses multiple Tavily tools to provide the most accurate and comprehensive information possible.
 
