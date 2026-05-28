@@ -2,7 +2,12 @@ from google.adk.agents import Agent
 from google.adk.tools.mcp_tool.mcp_session_manager import StdioConnectionParams
 from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset
 from mcp import StdioServerParameters
+from dotenv import load_dotenv
 import os
+
+# Load keys from my_agent/.env so they work on direct import too,
+# not only when launched via `adk web` / `adk run`.
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 # Get API key from environment
 TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
